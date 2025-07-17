@@ -18,11 +18,63 @@
 
 \subsection{Parámetros}
 
+\begin{itemize}
+	\item $n \in \mathbb{ N }$: número total de personas.
+
+	\item $m \in \mathbb{ N }$: número total de opiniones.
+
+	\item $p \in \mathbb{ N }^m$: vector con la distribución de personas por opinión, donde $p_i$ es el número de personas que inicialmente tienen la opinión $i \in 1\dots m$, $\sum_{ i = 1 }^m p_i = n$.
+
+	\item $e \in [0,1]^m$: vector con los valores de extremismo de las opiniones, donde $e_i \in [0,1]$ es el valor de extremismo de la opinión $i \in 1 \dots m$.
+
+	\item $c$: matriz de costes, donde $c_{ i,j } \in \mathbb{ R }^+$ es el coste de mover una persona de la opinión $i$ a la opinión $j$, para $i,j \in 1 \dots m$ ($c_{ i,i } = 0$).
+
+	\item $ce$: vector de coste extra, donde $ce_i \in \mathbb{ R }^+$ es el coste adicional de mover una persona a la opinión $i$ si esa opinión estaba inicialmente vacía, para $i \in 1 \dots m$.
+
+	\item $ct \in \mathbb{ R }^+$: coste total permitido.
+
+	\item $M \in \mathbb{ R }^+$: número máximo de movimientos permitidos.
+\end{itemize}
+
 \subsection{Variables}
+
+Una matriz $s$, donde $s_{ i,j } \in \mathbb{ N }$ es el número de personas movidas de la opinión $i$ a la opinión $j$, para $i,j \in 1 \dots m$.
+
+Esta matriz es de dimensiones $m \times m$ y debe cumplir las siguientes restricciones:
+
+\begin{itemize}
+	\item $\sum_{ j = 1 }^m s_{ i,j } = p_i$: para cada opinión inicial $i$, la suma de personas que se mueven desde esa opinión hacia todas las demás (incluida ella misma) debe ser igual al número de personas que originalmente tenían la opinión $i$. $\sum_{ i = 1 }^m \sum_{ j = 1 }^m s_{ i,j } = n$.
+
+	\item $s_{ i,j } \geq 0$ para todo $i,j \in 1 \dots m$ (no se pueden mover personas a una opinión que no existe).
+\end{itemize}
 
 \subsection{Restricciones}
 
+\subsubsection{Numero de movimientos}
+
+\begin{equation}
+	\sum_{ i = 1 }^m \sum_{ j = 1 }^m s_{ i,j } \cdot |j-i| \leq M
+\end{equation}
+
+\subsubsection{Coste total}
+
+\begin{equation}
+	\sum_{ i = 1 }^m \sum_{ j = 1 }^m c_{ i,j } \left (1 + \frac{ p_i }{ n } \right ) * s_{ i,j } + \delta_{ p_j, 0 } \cdot ce_j * s_{ i,j } \leq ct
+\end{equation}
+
+$\delta_{ p_j, 0 }$ es una función indicadora que vale 1 si $p_j = 0$ y 0 en caso contrario.
+
 \subsection{Función objetivo}
+
+La idea es minimizar el extremismo, que se calcula con la siguiente fórmula:
+
+\begin{equation}
+	E(p^\prime,e) = \sum_{ i = 1 }^m { p^\prime }_i * e_i
+\end{equation}
+
+- $p^\prime$: vector con la distribución de personas tras aplicar los movimientos de $s$.
+
+- $e$: vector con los valores de extremismo de las opiniones.
 
 \section{Implementación}
 
@@ -43,7 +95,6 @@
 \subsection{Resultados de las ejecuciones}
 
 \subsubsection{Tabla de tiempos}
-
 
 \section{Análisis de resultados}
 

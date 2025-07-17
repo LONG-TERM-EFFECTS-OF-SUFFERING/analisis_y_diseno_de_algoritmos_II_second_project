@@ -6,9 +6,12 @@
 
 - $m \in \mathbb{ N }$: the total amount of opinions.
 
-- $p$: the vector with the distribution of people per opinion, where $p_i$ is the number of people who initially have the opinion $i \in 1\dots m$.
+- $p \in \mathbb{ N }^m$: the vector with the distribution of people per opinion, where $p_i$ is the number of people who initially have the opinion $i \in 1\dots m$.
 
-- $e$: the vector with the values of extremism of the opinions, where $e_i \in [0,1]$ is the extremism value of the opinion $i \in 1\dots m$.
+
+	> $\sum_{ i = 1 }^m p_i = n$.
+
+- $e \in [0,1]^m$: the vector with the values of extremism of the opinions, where $e_i \in [0,1]$ is the extremism value of the opinion $i \in 1\dots m$.
 
 - $c$: the cost matrix, where $c_{ i,j } \in \mathbb{ R }^+$ is the cost of moving a person from opinion $i$ to opinion $j$ $i,j \in 1\dots m$.
 
@@ -36,3 +39,15 @@ $$
 	c_{ i,j } \left ( 1 + \frac{ p_i }{ n } \right ) * x + { ce }_j * x \quad p_j = 0 \\
 \end{align}
 $$
+
+### Target function
+
+The idea is to minimize extremism, which is calculated with the following formula:
+
+$$
+E(p^\prime,e) = \sum_{ i = 1 }^m { p^\prime } * e_i
+$$
+
+- $p^\prime$: vector with the distribution of people after applying the movements of $s$.
+
+- $e$: the vector with the values of extremism of the opinions.
