@@ -1,3 +1,6 @@
+.venv/
+**/__pycache__/
+
 # Ignore LaTeX build files
 *.aux
 *.log
