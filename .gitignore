@@ -11,3 +11,6 @@
 *.synctex.gz
 *.bbl
 *.blg
+
+# Temporary file
+DatosProyecto.dzn
