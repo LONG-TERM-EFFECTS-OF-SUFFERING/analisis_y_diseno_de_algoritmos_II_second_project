@@ -1,7 +1,4 @@
-import json
 import os
-
-from minizinc import Status
 
 from tools.generate_dzn import generate_dzn
 from tools.run_model import run_model
@@ -58,17 +55,10 @@ def solve_all_dzn() -> None:
 		except Exception as e:
 			print(f"Error ({e}): failed to solve {dzn_path}")
 
-		if result.status in (Status.UNSATISFIABLE, Status.UNKNOWN):
-			print(f"No solution found for {dzn_path}")
-			continue
-
-		print(f"Status: {result.status.name}")
-
-		result = json.loads(str(result))
-
-		print(f"Extremism: {result["extremism"]}")
-		print(f"Total cost: {result["total_cost"]}")
+		print(f"s matrix: {result["s"]}")
 		print(f"p_prime: {result["p_prime"]}")
+		print(f"Total cost: {result["total_cost"]}")
+		print(f"Extremism: {result["extremism"]}")
 		print("# ---------------------------------------------------------------------------- #")
 
 

@@ -1,9 +1,9 @@
 import os
 
-from minizinc import Driver, Instance, Model, Solver
+from minizinc import Instance, Model, Solver
 
 
-def run_model(model_path:str, dzn_path: str) -> str:
+def run_model(model_path:str, dzn_path: str) -> dict:
 	"""
 	Load a MiniZinc model and DZN data file, solve the instance, and return the solver result.
 
@@ -16,8 +16,8 @@ def run_model(model_path:str, dzn_path: str) -> str:
 
 	Returns
 	-------
-	Result
-		A MiniZinc Result object containing status, solution, and statistics.
+	dict
+		A dictionary containing the solution.
 
 	Raises
 	------
@@ -31,8 +31,9 @@ def run_model(model_path:str, dzn_path: str) -> str:
 		raise RuntimeError("Error: the provided DNZ path does not exist")
 
 	model = Model(model_path)
+	model.output_type = dict
 	model.add_file(dzn_path)
 	solver = Solver.lookup("highs")
 	instance = Instance(solver, model)
 	result = instance.solve()
-	return  result
+	return  result.solution

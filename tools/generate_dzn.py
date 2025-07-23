@@ -1,6 +1,3 @@
-import os
-
-
 def parse_txt(
 	path: str
 ) -> tuple[int, int, list[int], list[float], list[float], list[list[float]], float, int]:
