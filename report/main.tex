@@ -78,6 +78,20 @@ La idea es minimizar el extremismo, que se calcula con la siguiente fórmula:
 
 \section{Implementación}
 
+Gracias a las instrucciones de modelado de MiniZinc y la naturaleza del problema, las restricciones y la función objetivo se pueden expresar en pocas líneas de código.
+
+La implementación puede describirse en los siguientes pasos:
+
+\begin{itemize}
+	\item Computación de distancias: para evitar el cálculo repetido de las distancias entre opiniones, se crea una matriz $d$ donde $d_{ i,j } = | i - j|$.
+
+	\item Conservación de flujos ($\sum_{ j = 1 }^m s_{ i,j } = p_i$): se hace con el fin de que nadie "desaparezca". También se añade la restricción $s_{ i,j } \leq p_i$ para acotar dominios y acelerar la búsqueda.
+
+	\item Cálculo de la distribución final: para calcular la distribución final se usó la fórmula $p^\prime[j] = \sum_{ i = 0 }^m s[i,j]$ $\forall j = 1\dots m$, personas que "terminan" en la opinion $j$.
+
+	\item Integración con Python: se utiliza la librería minizinc para ejecutar el modelo de MiniZinc desde Python, permitiendo una mayor flexibilidad en la gestión de instancias y resultados.
+\end{itemize}
+
 \section{Análisis de Branch and Bound}
 
 \subsection{Descripción del mecanismo}
@@ -91,10 +105,6 @@ La idea es minimizar el extremismo, que se calcula con la siguiente fórmula:
 \subsection{Instancias de prueba provistas}
 
 \subsection{Instancias adicionales generadas}
-
-\subsection{Resultados de las ejecuciones}
-
-\subsubsection{Tabla de tiempos}
 
 \section{Análisis de resultados}
 
