@@ -51,3 +51,13 @@ $$
 - $p^\prime$: vector with the distribution of people after applying the movements of $s$.
 
 - $e$: the vector with the values of extremism of the opinions.
+
+## Instructions to execute it
+
+- Create a Python virtual environment: `python -m venv .venv`.
+
+	> This is optional, but recommended.
+
+1. Install the libraries included in `requirements.txt`: `pip install -r requirements.txt`.
+
+2. Run the main UI script: `python ./gui.py`.

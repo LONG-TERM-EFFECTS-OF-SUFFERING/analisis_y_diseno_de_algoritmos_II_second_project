@@ -33,7 +33,7 @@
 
 	\item $ct \in \mathbb{ R }^+$: coste total permitido.
 
-	\item $M \in \mathbb{ R }^+$: número máximo de movimientos permitidos.
+	\item $M \in \mathbb{ N }$: número máximo de movimientos permitidos.
 \end{itemize}
 
 \subsection{Variables}
@@ -53,7 +53,7 @@ Esta matriz es de dimensiones $m \times m$ y debe cumplir las siguientes restric
 \subsubsection{Numero de movimientos}
 
 \begin{equation}
-	\sum_{ i = 1 }^m \sum_{ j = 1 }^m s_{ i,j } \cdot |j-i| \leq M
+	\sum_{ i = 1 }^m \sum_{ j = 1 }^m s_{ i,j } \cdot \abs{ j - i } \leq M
 \end{equation}
 
 \subsubsection{Coste total}
@@ -76,6 +76,10 @@ La idea es minimizar el extremismo, que se calcula con la siguiente fórmula:
 
 - $e$: vector con los valores de extremismo de las opiniones.
 
+\subsection{Clasificación}
+
+Aunque todas las variables de decisión son enteras, para modelar las restricciones es necesario usar variables de tipo \texttt{float}. Esto hace que el modelo sea un \emph{Programación Lineal Entera Mixta}.
+
 \section{Implementación}
 
 Gracias a las instrucciones de modelado de MiniZinc y la naturaleza del problema, las restricciones y la función objetivo se pueden expresar en pocas líneas de código.
@@ -83,7 +87,7 @@ Gracias a las instrucciones de modelado de MiniZinc y la naturaleza del problema
 La implementación puede describirse en los siguientes pasos:
 
 \begin{itemize}
-	\item Computación de distancias: para evitar el cálculo repetido de las distancias entre opiniones, se crea una matriz $d$ donde $d_{ i,j } = | i - j|$.
+	\item Computación de distancias: para evitar el cálculo repetido de las distancias entre opiniones, se crea una matriz $d$ donde $d_{ i,j } = \abs{ i - j }$.
 
 	\item Conservación de flujos ($\sum_{ j = 1 }^m s_{ i,j } = p_i$): se hace con el fin de que nadie "desaparezca". También se añade la restricción $s_{ i,j } \leq p_i$ para acotar dominios y acelerar la búsqueda.
 
@@ -91,6 +95,8 @@ La implementación puede describirse en los siguientes pasos:
 
 	\item Integración con Python: se utiliza la librería minizinc para ejecutar el modelo de MiniZinc desde Python, permitiendo una mayor flexibilidad en la gestión de instancias y resultados.
 \end{itemize}
+
+Obsérvese que \texttt{s}, \texttt{total\_moves} y \texttt{p\'} son variables enteras, mientras que \texttt{total\_cost} y \texttt{extremism} son continuas. Por ello, el modelo es de tipo \emph{Programación Lineal Entera Mixta}.
 
 \section{Análisis de Branch and Bound}
 

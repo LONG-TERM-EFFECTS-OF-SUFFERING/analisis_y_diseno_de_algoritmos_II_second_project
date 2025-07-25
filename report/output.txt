@@ -1,0 +1,197 @@
+diff --git a/README.md b/README.md
+index d33eaf6..8eb520d 100644
+--- a/README.md
++++ b/README.md
+@@ -51,3 +51,13 @@ $$
+ - $p^\prime$: vector with the distribution of people after applying the movements of $s$.
+ 
+ - $e$: the vector with the values of extremism of the opinions.
++
++## Instructions to execute it
++
++- Create a Python virtual environment: `python -m venv .venv`.
++
++	> This is optional, but recommended.
++
++1. Install the libraries included in `requirements.txt`: `pip install -r requirements.txt`.
++
++2. Run the main UI script: `python ./gui.py`.
+diff --git a/report/configuration.tex b/report/configuration.tex
+index c876398..33692f8 100644
+--- a/report/configuration.tex
++++ b/report/configuration.tex
+@@ -19,4 +19,9 @@
+ 	top=1.5cm,
+ 	bottom=1.5cm
+ }
+-\pagestyle{plain} % Chapter/section in header
+\ No newline at end of file
++\pagestyle{plain} % Chapter/section in header
++
++\newcommand \norm[1]{ \left \lVert #1 \right \rVert }
++\newcommand \abs[1]{ \left \lvert #1 \right \rvert }
++\newcommand \ceil[1]{ \left \lceil #1 \right \rceil }
++\newcommand \floor[1]{ \left \lfloor #1 \right \rfloor }
+diff --git a/report/main.pdf b/report/main.pdf
+index 4b367cf..f230dd4 100644
+--- a/report/main.pdf
++++ b/report/main.pdf
+@@ -2,20 +2,21 @@ Moderando el conflicto interno de opiniones en una red social
+ 
+ Caldero´n Prieto Brandon (2125974) Cely Archila Juleipssy Daianne (2122036)
+                             Fonseca Idarraga Juan David (2323942)
+-                                          23 de julio de 2025
++                                          25 de julio de 2025
+ ´Indice general
+ 
+      0.1. Modelo gen´erico . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+-            0.1.1. Para´metros . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
++            0.1.1. Par´ametros . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+             0.1.2. Variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+             0.1.3. Restricciones . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+             0.1.4. Funci´on objetivo . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
++            0.1.5. Clasificaci´on . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+ 
+      0.2. Implementaci´on . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+-     0.3. Ana´lisis de Branch and Bound . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
++     0.3. An´alisis de Branch and Bound . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+ 
+-            0.3.1. Descripci´on del mecanismo . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+-            0.3.2. An´alisis de a´rboles generados . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
++            0.3.1. Descripcio´n del mecanismo . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
++            0.3.2. An´alisis de ´arboles generados . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+             0.3.3. Ejemplos con visualizador de MiniZinc . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+      0.4. Instancias y pruebas . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+             0.4.1. Instancias de prueba provistas . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+@@ -30,17 +31,17 @@ n ∈ N: nu´mero total de personas.
+ 
+ m ∈ N: nu´mero total de opiniones.
+ 
+-p ∈ Nm: vector con la distribucio´n de personas por opinio´n, donde pi es el nu´mero de personas que inicialmente
++p ∈ Nm: vector con la distribuci´on de personas por opinio´n, donde pi es el nu´mero de personas que inicialmente
+                                    m
+ tienen la opinio´n i ∈ 1 . . . m,  i=1     pi  =    n.
+ 
+ e ∈ [0, 1]m: vector con los valores de extremismo de las opiniones, donde ei ∈ [0, 1] es el valor de extremismo de la
+-opinio´n i ∈ 1 . . . m.
++opini´on i ∈ 1 . . . m.
+ 
+-c: matriz de costes, donde ci,j ∈ R+ es el coste de mover una persona de la opinio´n i a la opini´on j, para i, j ∈ 1 . . . m
++c: matriz de costes, donde ci,j ∈ R+ es el coste de mover una persona de la opini´on i a la opinio´n j, para i, j ∈ 1 . . . m
+ (ci,i = 0).
+ 
+-ce: vector de coste extra, donde cei ∈ R+ es el coste adicional de mover una persona a la opinio´n i si esa opini´on
++ce: vector de coste extra, donde cei ∈ R+ es el coste adicional de mover una persona a la opini´on i si esa opini´on
+ estaba inicialmente vac´ıa, para i ∈ 1 . . . m.
+ 
+ ct ∈ R+: coste total permitido.
+@@ -52,7 +53,7 @@ M ∈ R+: nu´mero m´aximo de movimientos permitidos.
+ Una matriz s, donde si,j ∈ N es el nu´mero de personas movidas de la opini´on i a la opini´on j, para i, j ∈ 1 . . . m.
+ Esta matriz es de dimensiones m × m y debe cumplir las siguientes restricciones:
+ 
+-m    si,j    =  pi:  para  cada  opinio´n  inicial  i,  la  suma  de  personas  que  se  mueven  desde  esa  opini´on  hacia  todas  las  dem´as
++m    si,j    =  pi:  para  cada  opini´on  inicial  i,  la  suma  de  personas  que  se  mueven  desde  esa  opini´on  hacia  todas  las  dema´s
+ j=1
+                                                                                                                        m      m
+ (incluida ella misma) debe ser igual al nu´mero de personas que originalmente ten´ıan la opini´on i.                   i=1    j=1    si,j  =  n.
+@@ -77,7 +78,7 @@ Coste total
+ 
+                                    i=1 j=1
+ 
+-δpj,0 es una funci´on indicadora que vale 1 si pj = 0 y 0 en caso contrario.
++δpj,0 es una funcio´n indicadora que vale 1 si pj = 0 y 0 en caso contrario.
+ 
+ 0.1.4. Funci´on objetivo
+ 
+@@ -89,32 +90,41 @@ La idea es minimizar el extremismo, que se calcula con la siguiente fo´rmula:
+ 
+                                                                       i=1
+ 
+-- p′: vector con la distribuci´on de personas tras aplicar los movimientos de s.
++- p′: vector con la distribucio´n de personas tras aplicar los movimientos de s.
+ 
+ - e: vector con los valores de extremismo de las opiniones.
+ 
++0.1.5. Clasificacio´n
++
++    Dado que todas las variables de decisio´n son enteras y todas las restricciones y el objetivo son lineales, el modelo es un
++Problema de Programaci´on Lineal Entera. No hablamos de un problema mixto porque no hay variables reales de decisi´on.
++
+                                                                       1
+ 0.2. Implementacio´n
+ 
+     Gracias a las instrucciones de modelado de MiniZinc y la naturaleza del problema, las restricciones y la funcio´n objetivo
+-se pueden expresar en pocas l´ıneas de co´digo.
++se pueden expresar en pocas l´ıneas de c´odigo.
+ 
+-    La implementaci´on puede describirse en los siguientes pasos:
++    La implementacio´n puede describirse en los siguientes pasos:
+ 
+-Computaci´on de distancias: para evitar el c´alculo repetido de las distancias entre opiniones, se crea una matriz d
++Computaci´on de distancias: para evitar el ca´lculo repetido de las distancias entre opiniones, se crea una matriz d
+ donde di,j = |i − j|.
+ 
+-Conservaci´on de flujos (  m    si,j  =  pi):  se  hace  con  el  fin  de  que  nadie  ”desaparezca”.  Tambi´en  se   an˜ade    la  restricci´on
++Conservaci´on de flujos (  m    si,j  =  pi):  se  hace  con  el  fin  de  que  nadie  ”desaparezca”.  Tambi´en  se   an˜ade    la  restriccio´n
+                            j=1
+ 
+ si,j ≤ pi para acotar dominios y acelerar la bu´squeda.
+ 
+-Ca´lculo de la distribucio´n final: para calcular la distribuci´on final se uso´ la fo´rmula p′[j] =             m    s[i,  j]  ∀j  =  1  .  .  .  m,
++C´alculo de la distribuci´on final: para calcular la distribuci´on final se us´o la fo´rmula p′[j] =             m    s[i,  j]  ∀j  =  1  .  .  .  m,
+                                                                                                                  i=0
+ personas que ”terminan.en la opinion j.
+ 
+-Integracio´n con Python: se utiliza la librer´ıa minizinc para ejecutar el modelo de MiniZinc desde Python, permitiendo
+-una mayor flexibilidad en la gesti´on de instancias y resultados.
++Integraci´on con Python: se utiliza la librer´ıa minizinc para ejecutar el modelo de MiniZinc desde Python, permitiendo
++una mayor flexibilidad en la gestio´n de instancias y resultados.
++
++    Aunque en el modelo se definan algunas variables intermedias de tipo float (como total cost y extremism), la u´nica
++variable de decisio´n real es la matriz s definida como var 0..max(p), es decir, el problema sigue siendo un Problema de
++Programacio´n Lineal Entera.
+ 
+ 0.3. An´alisis de Branch and Bound
+ 
+diff --git a/report/main.tex b/report/main.tex
+index 307fc10..8084237 100644
+--- a/report/main.tex
++++ b/report/main.tex
+@@ -53,7 +53,7 @@ Esta matriz es de dimensiones $m \times m$ y debe cumplir las siguientes restric
+ \subsubsection{Numero de movimientos}
+ 
+ \begin{equation}
+-	\sum_{ i = 1 }^m \sum_{ j = 1 }^m s_{ i,j } \cdot |j-i| \leq M
++	\sum_{ i = 1 }^m \sum_{ j = 1 }^m s_{ i,j } \cdot \abs{ j - i } \leq M
+ \end{equation}
+ 
+ \subsubsection{Coste total}
+@@ -76,6 +76,10 @@ La idea es minimizar el extremismo, que se calcula con la siguiente fórmula:
+ 
+ - $e$: vector con los valores de extremismo de las opiniones.
+ 
++\subsection{Clasificación}
++
++Dado que todas las variables de decisión son enteras y todas las restricciones y el objetivo son lineales, el modelo es un \emph{Problema de Programación Lineal Entera}. No hablamos de un problema \emph{mixto} porque no hay variables reales de decisión.
++
+ \section{Implementación}
+ 
+ Gracias a las instrucciones de modelado de MiniZinc y la naturaleza del problema, las restricciones y la función objetivo se pueden expresar en pocas líneas de código.
+@@ -83,7 +87,7 @@ Gracias a las instrucciones de modelado de MiniZinc y la naturaleza del problema
+ La implementación puede describirse en los siguientes pasos:
+ 
+ \begin{itemize}
+-	\item Computación de distancias: para evitar el cálculo repetido de las distancias entre opiniones, se crea una matriz $d$ donde $d_{ i,j } = | i - j|$.
++	\item Computación de distancias: para evitar el cálculo repetido de las distancias entre opiniones, se crea una matriz $d$ donde $d_{ i,j } = \abs{ i - j }$.
+ 
+ 	\item Conservación de flujos ($\sum_{ j = 1 }^m s_{ i,j } = p_i$): se hace con el fin de que nadie "desaparezca". También se añade la restricción $s_{ i,j } \leq p_i$ para acotar dominios y acelerar la búsqueda.
+ 
+@@ -92,6 +96,8 @@ La implementación puede describirse en los siguientes pasos:
+ 	\item Integración con Python: se utiliza la librería minizinc para ejecutar el modelo de MiniZinc desde Python, permitiendo una mayor flexibilidad en la gestión de instancias y resultados.
+ \end{itemize}
+ 
++Aunque en el modelo se definan algunas variables intermedias de tipo \texttt{float} (como \texttt{total\_cost} y \texttt{extremism}), la única variable de decisión real es la matriz \texttt{s} definida como \texttt{var 0..max(p)}, es decir, el problema sigue siendo un \emph{Problema de Programación Lineal Entera}.
++
+ \section{Análisis de Branch and Bound}
+ 
+ \subsection{Descripción del mecanismo}
