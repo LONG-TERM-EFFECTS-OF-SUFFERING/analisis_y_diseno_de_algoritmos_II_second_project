@@ -216,6 +216,30 @@ Asimismo, las restricciones impuestas ($ct$ y $M$) fueron definidas para evitar 
 
 \section{Análisis de resultados}
 
+A partir de las instancias tanto provistas como generadas, se observa que el modelo implementado en MiniZinc y ejecutado mediante Python ofrece una solución robusta y eficiente. Para las $30$ pruebas provistas, el modelo fue capaz de encontrar soluciones óptimas en todos los casos. Las métricas reportadas muestran tiempos de ejecución razonables, incluso en pruebas con múltiples soluciones factibles y árboles de decisión más complejos. Por ejemplo, la prueba $0$ entregó $16$ soluciones factibles en menos de $600 \text{ms}$, mientras que la prueba $4$ alcanzó $38$ soluciones factibles con más de $1,700$ nodos explorados, demostrando eficiencia y consistencia.
+
+En cuanto a las instancias adicionales generadas por el equipo, estas fueron diseñadas para desafiar la capacidad de adaptación del modelo a condiciones más exigentes. Algunas instancias, como la prueba $1$ generada, requirieron más de $10$ segundos de cómputo y recorrieron más de $250,000$ nodos, reflejando una complejidad elevada. Sin embargo, se lograron soluciones satisfactorias en todos los casos, validando la capacidad del modelo para responder a diversas condiciones iniciales, restricciones ajustadas y estructuras de costos no uniformes.
+
 \section{Conclusiones}
+
+El proyecto logró cumplir con todos los objetivos propuestos: diseñar un modelo matemático que permita minimizar el extremismo en una población, formularlo en MiniZinc, resolverlo con métodos exactos (como Branch and Bound) y analizar la eficiencia del enfoque propuesto.
+
+Los resultados muestran que el modelo es capaz de encontrar soluciones óptimas en tiempo razonable para instancias pequeñas y medianas. Además, el uso de estructuras de costos complejas y restricciones no triviales permitió validar su aplicabilidad en escenarios reales.
+
+El análisis del algoritmo Branch and Bound muestra su capacidad de reducir el espacio de búsqueda mediante poda efectiva, lo que lo hace útil para problemas combinatorios con restricciones.
+
+Entre las ventajas del enfoque propuesto se destacan:
+
+\begin{itemize}
+	\item La expresividad del modelo y su capacidad de adaptación a nuevas condiciones.
+
+	\item La facilidad de integración con Python para gestionar instancias y automatizar pruebas.
+
+	\item La representación clara de los árboles de decisión para entender el comportamiento del algoritmo.
+\end{itemize}
+
+Sin embargo, también se identifican limitaciones en escalabilidad, dado que para instancias muy grandes el tiempo de ejecución puede volverse excesivo.
+
+En resumen, se implementó un modelo exacto, eficiente y adaptable, que logra minimizar el extremismo de opiniones bajo condiciones realistas. Este trabajo sienta las bases para futuras extensiones, como modelos más dinámicos o versiones heurísticas que ofrezcan soluciones más rápidas en contextos de gran escala.
 
 \end{document}
