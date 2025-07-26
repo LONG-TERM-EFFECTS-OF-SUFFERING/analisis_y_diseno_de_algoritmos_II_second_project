@@ -100,17 +100,119 @@ Obsérvese que \texttt{s}, \texttt{total\_moves} y \texttt{p\'} son variables en
 
 \section{Análisis de Branch and Bound}
 
+
 \subsection{Descripción del mecanismo}
+
+\textit{Branch and Bound} es un algoritmo utilizado para resolver problemas de optimización entera y combinatoria. Su objetivo es hallar la solución óptima sin evaluar todas las combinaciones posibles, lo cual lo hace eficiente en espacios de búsqueda grandes y discretos.
+
+
+\begin{itemize}
+    \item \textbf{Ramificación}: se divide el problema original en subproblemas más pequeños al restringir los valores de ciertas variables, generando un árbol de decisión.
+
+    \item \textbf{Acotamiento}: se calcula una cota (superior o inferior) para cada nodo del árbol, que indica el mejor valor posible que se puede alcanzar desde ese nodo.
+
+    \item \textbf{Poda}: se descartan nodos cuyo valor no puede superar a la mejor solución encontrada hasta el momento o que no tienen solución factible.
+\end{itemize}
+
+Gracias a este enfoque, el algoritmo reduce significativamente el número de soluciones que debe explorar, encontrando la solución óptima de manera más eficiente.
 
 \subsection{Análisis de árboles generados}
 
-\subsection{Ejemplos con visualizador de MiniZinc}
+El árbol de decisión permite visualizar de manera estructurada el proceso de búsqueda de soluciones dentro de un espacio factible. A través del uso de distintos símbolos y colores, se representan los diversos tipos de nodos involucrados en el análisis, facilitando la interpretación de las estrategias aplicadas, como la exploración y la poda. A continuación, se explican los elementos principales del gráfico:
+
+\begin{itemize}
+    \item \textbf{ Círculos azules}: Representan nodos internos o intermedios del árbol. Son puntos de decisión donde aún es posible realizar divisiones, es decir, donde se evalúan variables y se generan nuevas ramas.
+
+    \item \textbf{ Triángulos rojos}: Corresponden a nodos que fueron podados, es decir, no continuaron su expansión. Esto ocurre cuando se determina, mediante el uso de cotas (superior o inferior), que seguir explorando esa rama no aportará mejores soluciones. Este tipo de poda es característico de métodos como \textit{Branch and Bound}.
+
+    \item \textbf{ Rombos verdes}: Indican nodos que representan soluciones factibles, es decir, alternativas que cumplen con todas las restricciones del problema. Estos nodos suelen ubicarse al final de cada rama (hojas del árbol).
+
+    \item \textbf{ Cuadrados rojos, naranjas y otros}: Representan nodos que también fueron podados, pero por otras razones, como violaciones de restricciones, inconsistencias o límites establecidos por heurísticas. Por ejemplo:
+    \begin{itemize}
+        \item \textbf{Cuadrado rojo}: Señala una poda por factibilidad, cuando el nodo no cumple con las restricciones.
+        \item \textbf{Cuadrado naranja}: Indica una poda temprana, aplicada por criterios adicionales como límites de tiempo, profundidad o guías heurísticas.
+    \end{itemize}
+\end{itemize}
+
+En la parte inferior del gráfico se presenta una leyenda numérica que resume el comportamiento del árbol:
+
+\begin{itemize}
+    \item {Depth:} Profundidad máxima alcanzada.
+    \item  Número de soluciones factibles encontradas.
+    \item Nodos que fueron podados.
+    \item Nodos abiertos o explorados durante el proceso.
+\end{itemize}
+
+Este tipo de representación resulta útil para comprender el alcance de la exploración, la eficiencia del algoritmo y el impacto de las estrategias de poda aplicadas.
+
+\vspace{0.7cm}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Prueba1.png}
+\caption{Árbol de decisión - prueba número 1}
+\end{figure}
+
+\vspace{0.5cm}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Prueba2.png}
+\caption{Árbol de decisión - prueba número 2}
+\end{figure}
+
+\vspace{0.5cm}
+
 
 \section{Instancias y pruebas}
 
 \subsection{Instancias de prueba provistas}
+Se nos asignó una batería de pruebas compuesta por 30 instancias. En todos los casos se logró encontrar soluciones óptimas. Para la ejecución del modelo, se utilizó el solver HiGHS a través de la biblioteca MiniZinc integrada en Python. En la tabla que se presenta a continuación, se pueden observar los resultados obtenidos para algunas de estas pruebas.
+\begin{table}[H]
+\centering
+\caption{Resumen de resultados - Pruebas provistas}
+\rowcolors{2}{gray!20}{white}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\rowcolor{gray!30}
+\textbf{Prueba} & \textbf{Costo} & \textbf{Soluciones} & \textbf{Tiempo} & \textbf{Nodos} & \textbf{Fallos} & \textbf{Valor Óptimo} \\
+\hline
+0   &  6.3 & 16   & 562ms  & 649   & 309   & 6.3 \\
+2     & 4.582  &  11 & 0.019ms  &  235 & 107  & 4.582 \\
+3   &  0.261 &  12  & 0.101ms &  163  &   69   & 0.261 \\
+4   & 1.06 & 38  & 118ms  & 1738 & 831  & 1.06 \\
+6  & 9.583 & 8 &  288ms  &  4876 &  2430  & 9.583   \\
+\hline
+\end{tabular}
+\end{table}
+
 
 \subsection{Instancias adicionales generadas}
+
+Creamos un conjunto de 5 instancias personalizadas, cuyos resultados se detallan a continuación:
+
+
+\begin{table}[H]
+\centering
+\caption{Resumen de resultados - Pruebas generadas}
+\rowcolors{2}{gray!20}{white}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\rowcolor{gray!30}
+\textbf{Prueba} & \textbf{Costo} & \textbf{Soluciones} & \textbf{Tiempo} & \textbf{Nodos} & \textbf{Fallos} & \textbf{Valor Óptimo} \\
+\hline
+1   &  11.9 & 13   & 10.39s  & 250981   & 125478   & 17.38 \\
+2     & 35.0  &  6 & 390ms  &  109 & 49  & 5.3 \\
+3   &  55.6 &  21  & 2.3ms &  107  & 0 & 12.326 \\
+4   & 145 & 35  & 11.08ms  & 163,369 & 81,650  & 9.7 \\
+5  & 16.9985 & 15 & 1.78s  & 35883 &  17927  & 13.521 \\
+\hline
+\end{tabular}
+\end{table}
+
+Las instancias utilizadas son adecuadas para evaluar el modelo, ya que presentan una variedad de condiciones que permiten analizar su desempeño de forma integral. Se incluye diversidad en tamaños y extremismos (p y e), lo cual permite observar cómo el modelo responde ante elementos con demandas muy distintas. Además, se emplean matrices de costos (c) no uniformes, es decir, estructuras en las que los valores de transporte entre elementos varían significativamente en lugar de mantenerse constantes o simétricos. Esto obliga al modelo a buscar rutas realmente eficientes en lugar de elegir caminos evidentes o arbitrarios.
+
+Asimismo, las restricciones impuestas (ct y M) fueron definidas para evitar soluciones triviales, exigiendo que el modelo realice un proceso de optimización más riguroso. Finalmente, al mantener constante el número de elementos y variar otros parámetros, se facilita el análisis del impacto que generan pequeños cambios en los datos sobre la solución final.
 
 \section{Análisis de resultados}
 
